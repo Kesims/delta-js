@@ -1,32 +1,69 @@
-import { useState } from 'react'
+import {useEffect, useRef, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import click1 from "./assets/click1.wav"
+import click2 from "./assets/click2.wav"
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+const clickAudio1 = new Audio(click1);
+const clickAudio2 = new Audio(click2);
+
+
+
+function App() {
+
+    const [bpm, setBpm] = useState(60);
+    const [playing, setPlaying] = useState<boolean>(false);
+
+
+    //const timer = useRef<number | null>(null);
+
+    useEffect(() => {
+
+        let timer: number | null | undefined = null;
+
+        let counter: number = 3;
+
+        function playAudio() {
+            counter++;
+            if (counter == 4) {
+                clickAudio2.play();
+                counter = 0;
+            }
+            else {
+                clickAudio1.play();
+            }
+
+        }
+
+        if(playing) {
+            timer = setInterval(() => playAudio(), (60/bpm)*1000)
+        } else {
+            // @ts-ignore
+            clearInterval(timer)
+        }
+
+        return () => {
+            // @ts-ignore
+            clearInterval(timer);
+        }
+    }, [playing, bpm])
+
+
+    const playHandler = () => {
+        setPlaying(!playing);
+    }
+
+    // @ts-ignore
+    return (
+    <div className="metronome">
+        <div className="bpm-slider">
+            <div>{bpm} bpm</div>
+            <input type="range" min="60" max="240" value={bpm} onChange={event => setBpm(parseInt(event.target.value, 10))}/>
+        </div>
+
+        <button onClick={playHandler}>{playing ? "Stop":"Play"}</button>
     </div>
   )
 }
