@@ -1,9 +1,5 @@
-import {ReactElement} from "react";
+import { ReactElement } from "react";
 
 export function CartHeader(): ReactElement {
-    return(
-        <div className="CartHeader">
-            HLAVICKA
-        </div>
-    )
+	return <div className="CartHeader">HLAVICKA</div>;
 }
