@@ -2,7 +2,7 @@ import "./App.css";
 import {Map} from "./components/Map";
 import { ResultBar } from "./components/ResultBar";
 import { History } from "./components/History";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {MAP_SIZE} from "./config";
 import {HistoryItemInterface} from "./interfaces/HistoryItem";
 function App() {
@@ -12,10 +12,15 @@ function App() {
     const [winner, setWinner] = useState<string>("Unknown");
     const [history, setHistory] = useState<HistoryItemInterface[]>(Array());
 
+    useEffect(()=> {
+        console.log("History modified!")
+    }, [history])
+
     const addHistoryMove = (text: string, mapState: string[]) => {
         let changeHistory = [...history];
         const historyItem = {text: text,
-                            savedState: mapState}
+                            savedState: mapState,
+                            whoIsPlaying: currentPlayer}
         changeHistory.push(historyItem);
         setHistory(changeHistory);
     }
@@ -23,6 +28,7 @@ function App() {
     const moveBackInHistoryHandler = (index: number) => {
         const newState = history[index];
         setMapState(newState.savedState);
+        setCurrentPlayer(newState.whoIsPlaying);
         addHistoryMove("History rollbacked!", newState.savedState);
     }
 
