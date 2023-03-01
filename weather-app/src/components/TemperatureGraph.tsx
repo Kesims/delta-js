@@ -1,3 +1,7 @@
 export function TemperatureGraph() {
-    return(<div></div>)
+    return(
+            <div className="temperatureGraph">
+
+            </div>
+            )
 }

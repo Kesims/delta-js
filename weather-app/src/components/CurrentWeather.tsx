@@ -1,3 +1,7 @@
 export function CurrentWeather() {
-    return (<div></div>)
+    return (
+            <div className="currentWeather">
+
+            </div>
+            )
 }
